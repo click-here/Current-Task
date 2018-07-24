@@ -77,6 +77,7 @@ def task_loop():
         time_elapsed_since_last_action += dt
         # dt is measured in milliseconds, therefore 250 ms = 0.25 seconds
         if time_elapsed_since_last_action > 250:
+            ## I should only call this if a new task is found. will resolve the recursive failure.
             message_display(session.query(Task).order_by(Task.id.desc()).first().task_name)
             time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
             
