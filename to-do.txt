@@ -2,3 +2,4 @@
 2. Simple shortcut at the end of the day that copies all set(tasks) to the clipboard for users ease of potentially entering into a spreadsheet.
 3. make pygame always on top
 4. Maybe have flash notifications on a timer like. Every 10 minutes a popup that shows "drink water"
+5. On boot show a little button that lets the user move to a new monitor. Perhaps store their preference in the db.
