@@ -31,7 +31,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # set up fonts
-basicFont = pygame.font.Font(r"C:\Fonts\segoeui-regular.ttf", 48)
+basicFont = pygame.font.Font("segoeui-regular.ttf", 48)
 
 # set up the text
 text = basicFont.render(last_task, True, WHITE)
@@ -53,7 +53,7 @@ pygame.display.update()
 
 def message_display(text):
     windowSurface.fill(BLACK)
-    largeText = pygame.font.Font(r"C:\Fonts\segoeui-regular.ttf", 48)
+    largeText = pygame.font.Font("segoeui-regular.ttf", 48)
     textSurface = largeText.render(text, True, WHITE)
     TextSurf, TextRect = textSurface, textSurface.get_rect()
     
@@ -62,8 +62,9 @@ def message_display(text):
     windowSurface.blit(TextSurf, TextRect)
 
     pygame.display.update()
-    time.sleep(10)
+    time.sleep(2)
     task_loop()
+
 
 def task_loop():
     last_task = ''
@@ -81,12 +82,15 @@ def task_loop():
         if time_elapsed_since_last_action > 250:
             ## I should only call this if a new task is found. will resolve the recursive failure.
             current_task = session.query(Task).order_by(Task.id.desc()).first().task_name
+            print(current_task)
             if last_task != current_task:
-                current_task = last_task
+                print('sup')
+                last_task = current_task
                 message_display(current_task)
             time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
             
             
         pygame.display.update()
 
+message_display("ok")
 task_loop()
