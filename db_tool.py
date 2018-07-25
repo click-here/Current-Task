@@ -18,7 +18,7 @@ class Task(Base):
 engine = create_engine('sqlite:///task.db')
  
 # create table if needed
-##Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 

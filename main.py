@@ -24,13 +24,14 @@ pygame.init()
 
 # set up the window
 infoObject = pygame.display.Info()
+
 windowSurface= pygame.display.set_mode((infoObject.current_w, 55), pygame.NOFRAME)
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # set up fonts
-basicFont = pygame.font.SysFont(None, 48)
+basicFont = pygame.font.Font(r"C:\Fonts\segoeui-regular.ttf", 48)
 
 # set up the text
 text = basicFont.render(last_task, True, WHITE)
@@ -52,8 +53,8 @@ pygame.display.update()
 
 def message_display(text):
     windowSurface.fill(BLACK)
-    largeText = pygame.font.Font('freesansbold.ttf',48)
-    textSurface = largeText.render("hrh'", True, WHITE)
+    largeText = pygame.font.Font(r"C:\Fonts\segoeui-regular.ttf", 48)
+    textSurface = largeText.render(text, True, WHITE)
     TextSurf, TextRect = textSurface, textSurface.get_rect()
     
     TextRect.center = (textRect.centerx,textRect.centery)
@@ -61,7 +62,7 @@ def message_display(text):
     windowSurface.blit(TextSurf, TextRect)
 
     pygame.display.update()
-    time.sleep(2)
+    time.sleep(10)
     task_loop()
 
 def task_loop():
