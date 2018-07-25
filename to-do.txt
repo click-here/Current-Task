@@ -5,3 +5,4 @@
 5. On boot show a little button that lets the user move to a new monitor. Perhaps store their preference in the db.
 6. Consider pomodoro timer app
 7. Need a method for 'doneing' a task
+8. It'd be nice if I could adjust the font size based on the length of the task name. Would need to support varried monitor resolutions.
