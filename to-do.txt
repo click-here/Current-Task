@@ -4,5 +4,3 @@
 4. Maybe have flash notifications on a timer like. Every 10 minutes a popup that shows "drink water"
 5. On boot show a little button that lets the user move to a new monitor. Perhaps store their preference in the db.
 6. Consider pomodoro timer app
-
-test, ignore
