@@ -24,7 +24,7 @@ pygame.init()
 
 # set up the window
 infoObject = pygame.display.Info()
-windowSurface= pygame.display.set_mode((infoObject.current_w, 55),pygame.NOFRAME)
+windowSurface= pygame.display.set_mode((infoObject.current_w, 55), pygame.NOFRAME)
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -65,6 +65,7 @@ def message_display(text):
     task_loop()
 
 def task_loop():
+    last_task = ''
     time_elapsed_since_last_action = 0
     while True:
         for event in pygame.event.get():
@@ -78,7 +79,10 @@ def task_loop():
         # dt is measured in milliseconds, therefore 250 ms = 0.25 seconds
         if time_elapsed_since_last_action > 250:
             ## I should only call this if a new task is found. will resolve the recursive failure.
-            message_display(session.query(Task).order_by(Task.id.desc()).first().task_name)
+            current_task = session.query(Task).order_by(Task.id.desc()).first().task_name
+            if last_task != current_task:
+                current_task = last_task
+                message_display(current_task)
             time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
             
             
