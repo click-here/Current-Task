@@ -10,7 +10,11 @@ from sqlalchemy.orm import sessionmaker
 engine = create_engine('sqlite:///task.db')
 Session = sessionmaker(bind=engine)
 session = Session()
-last_task = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first().task_name
+query = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first()
+if query is not None:
+    last_task = query.task_name
+else:
+    last_task = "No open tasks"
 # END DB STUFF
 
 BLACK = (0, 0, 0)
@@ -49,6 +53,7 @@ def get_recent_query():
 
 def mark_current_task_done():
     current_task = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first()
+    print(current_task)
     current_task.is_active = 0
     session.commit()
     print('"%s" marked complete'%current_task.task_name)
