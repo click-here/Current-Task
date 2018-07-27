@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 engine = create_engine('sqlite:///task.db')
 Session = sessionmaker(bind=engine)
 session = Session()
-last_task = session.query(Task).order_by(Task.id.desc()).first().task_name
+last_task = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first().task_name
 # END DB STUFF
 
 BLACK = (0, 0, 0)
@@ -41,27 +41,34 @@ def message_display(text):
     task_loop()
 
 
+def get_recent_query():
+    current_task = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first()
+    message_display(current_task.task_name)
+    time.sleep(2)
+
+def mark_current_task_done():
+    current_task = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first()
+    current_task.is_active = 0
+    session.commit()
+    print('"%s" marked complete'%current_task.task_name)
+
 def task_loop():
     last_task = ''
     time_elapsed_since_last_action = 0
-    while True:
+    while True:       
         for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # On right click mark task showing as done.
+                if event.button == 3:
+                    mark_current_task_done()
+            # If mouse touches top of screen requery the db.
+            if pygame.mouse.get_pos()[1] == 0:
+                get_recent_query()
+                
             if event.type == QUIT:
                 pygame.quit()
-                sys.exit()         
-        
-        dt = clock.tick() 
+                sys.exit()     
 
-        time_elapsed_since_last_action += dt
-        if time_elapsed_since_last_action > 250:
-            current_task = session.query(Task).order_by(Task.id.desc()).first().task_name
-            print(current_task)
-            if last_task != current_task:
-                last_task = current_task
-                message_display(current_task)
-            time_elapsed_since_last_action = 0
-            
-            
         pygame.display.update()
 
 task_loop()
