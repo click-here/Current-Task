@@ -1,7 +1,5 @@
 # Current-Task
 
-FARR Interface
-
 Right click anywhere on pygame to mark task done.
 
 Hover at top of screen (in pygame) to requery the database.
