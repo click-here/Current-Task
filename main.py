@@ -44,6 +44,7 @@ def message_display(text):
 def get_recent_query():
     current_task = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first()
     message_display(current_task.task_name)
+    
     time.sleep(2)
 
 def mark_current_task_done():
@@ -61,6 +62,7 @@ def task_loop():
                 # On right click mark task showing as done.
                 if event.button == 3:
                     mark_current_task_done()
+                    get_recent_query()
             # If mouse touches top of screen requery the db.
             if pygame.mouse.get_pos()[1] == 0:
                 get_recent_query()
