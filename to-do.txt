@@ -6,5 +6,4 @@
 6. Consider pomodoro timer app
 7. Need a method for 'doneing' a task
 8. It'd be nice if I could adjust the font size based on the length of the task name. Would need to support varried monitor resolutions.
-
-
+9. A simple way to track water consumption with a little blue bar that goes accross the screen. 
