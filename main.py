@@ -2,9 +2,11 @@ import pygame, sys
 from pygame.locals import *
 import os  
 import time
-from db_tool import Task
+from db_tool import Task, Water
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Date, cast
+from datetime import date
 
 # START DB STUFF
 engine = create_engine('sqlite:///task.db')
@@ -19,6 +21,8 @@ else:
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255) 
+BLUE = (0, 255, 255)
+GREEN = (255, 0 ,255)
 
 clock = pygame.time.Clock()
 os.environ['SDL_VIDEO_WINDOW_POS'] = '0,0'
@@ -28,7 +32,12 @@ infoObject = pygame.display.Info()
 windowSurface = pygame.display.set_mode((infoObject.current_w, 55), pygame.NOFRAME)  
 
 windowSurface.fill(BLACK)
+
+# water button
+pygame.draw.rect(windowSurface, GREEN, [0, 35, 20, 20])
+
 pygame.display.update()
+
 
 def message_display(text):
     windowSurface.fill(BLACK)
@@ -58,6 +67,25 @@ def mark_current_task_done():
     session.commit()
     print('"%s" marked complete'%current_task.task_name)
 
+def add_water():
+    water_amnt = Water(amount=24)
+    session.add(water_amnt)
+    session.commit()
+
+    daily_amount = session.query(Water).filter(Water.created_date >= date.today())
+    daily_amount = sum([x.amount for x in daily_amount])
+    daily_goal = 72
+
+    percent_of_daily_goal = daily_amount / daily_goal
+
+    rect_size = infoObject.current_w * percent_of_daily_goal
+    print(rect_size)
+    t = pygame.draw.rect(windowSurface, BLUE, [0, 0, rect_size, 5])
+    pygame.display.update()
+
+
+
+
 def task_loop():
     last_task = ''
     time_elapsed_since_last_action = 0
@@ -70,7 +98,9 @@ def task_loop():
                     get_recent_query()
             # If mouse touches top of screen requery the db.
             if pygame.mouse.get_pos()[1] == 0:
+                add_water()
                 get_recent_query()
+                
                 
             if event.type == QUIT:
                 pygame.quit()

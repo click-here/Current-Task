@@ -14,6 +14,13 @@ class Task(Base):
     task_name = Column(String(250), nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
     is_active = Column(Boolean, unique=False, default=True)
+
+class Water(Base):
+    __tablename__ = 'WaterConsumption'
+    id = Column(Integer, primary_key=True)
+    amount = Column(Integer,nullable=False)
+    created_date = Column(DateTime, default=datetime.datetime.utcnow)
+    
  
 engine = create_engine('sqlite:///task.db')
  
