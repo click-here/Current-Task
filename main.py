@@ -48,7 +48,7 @@ def message_display(text):
     TextRect.center = (windowSurface.get_rect().centerx,windowSurface.get_rect().centery)
     
     windowSurface.blit(TextSurf, TextRect)
-
+    show_water()
     pygame.display.update()
     time.sleep(1)
     task_loop()
@@ -57,7 +57,6 @@ def message_display(text):
 def get_recent_query():
     current_task = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first()
     message_display(current_task.task_name)
-    
     time.sleep(2)
 
 def mark_current_task_done():
@@ -67,10 +66,10 @@ def mark_current_task_done():
     session.commit()
     print('"%s" marked complete'%current_task.task_name)
 
-def add_water():
-    water_amnt = Water(amount=24)
-    session.add(water_amnt)
-    session.commit()
+def show_water():
+##    water_amnt = Water(amount=24)
+##    session.add(water_amnt)
+##    session.commit()
 
     daily_amount = session.query(Water).filter(Water.created_date >= date.today())
     daily_amount = sum([x.amount for x in daily_amount])
@@ -80,7 +79,7 @@ def add_water():
 
     rect_size = infoObject.current_w * percent_of_daily_goal
     print(rect_size)
-    t = pygame.draw.rect(windowSurface, BLUE, [0, 0, rect_size, 5])
+    pygame.draw.rect(windowSurface, BLUE, [0, 0, rect_size, 5])
     pygame.display.update()
 
 
@@ -98,7 +97,6 @@ def task_loop():
                     get_recent_query()
             # If mouse touches top of screen requery the db.
             if pygame.mouse.get_pos()[1] == 0:
-                add_water()
                 get_recent_query()
                 
                 
