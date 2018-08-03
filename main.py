@@ -33,8 +33,7 @@ windowSurface = pygame.display.set_mode((infoObject.current_w, 55), pygame.NOFRA
 
 windowSurface.fill(BLACK)
 
-# water button
-pygame.draw.rect(windowSurface, GREEN, [0, 35, 20, 20])
+
 
 pygame.display.update()
 
@@ -67,10 +66,12 @@ def mark_current_task_done():
     print('"%s" marked complete'%current_task.task_name)
 
 def show_water():
-##    water_amnt = Water(amount=24)
-##    session.add(water_amnt)
-##    session.commit()
-
+    water_amnt = Water(amount=24)
+    session.add(water_amnt)
+    session.commit()
+    # water button
+    pygame.draw.rect(windowSurface, GREEN, [0, 35, 20, 20])
+    
     daily_amount = session.query(Water).filter(Water.created_date >= date.today())
     daily_amount = sum([x.amount for x in daily_amount])
     daily_goal = 72
@@ -88,18 +89,21 @@ def show_water():
 def task_loop():
     last_task = ''
     time_elapsed_since_last_action = 0
-    while True:       
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # On right click mark task showing as done.
                 if event.button == 3:
                     mark_current_task_done()
                     get_recent_query()
+                if event.button == 1:
+                    if 55 >= pygame.mouse.get_pos()[1] >= 35 and 20 >= pygame.mouse.get_pos()[0] >=0:
+                        print(pygame.mouse.get_pos())
             # If mouse touches top of screen requery the db.
             if pygame.mouse.get_pos()[1] == 0:
                 get_recent_query()
                 
-                
+            
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()     
