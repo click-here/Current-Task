@@ -65,10 +65,14 @@ def mark_current_task_done():
     session.commit()
     print('"%s" marked complete'%current_task.task_name)
 
-def show_water():
+def add_water():
     water_amnt = Water(amount=24)
     session.add(water_amnt)
     session.commit()
+
+    
+def show_water():
+
     # water button
     pygame.draw.rect(windowSurface, GREEN, [0, 35, 20, 20])
     
@@ -99,6 +103,7 @@ def task_loop():
                 if event.button == 1:
                     if 55 >= pygame.mouse.get_pos()[1] >= 35 and 20 >= pygame.mouse.get_pos()[0] >=0:
                         print(pygame.mouse.get_pos())
+                        add_water()
             # If mouse touches top of screen requery the db.
             if pygame.mouse.get_pos()[1] == 0:
                 get_recent_query()
