@@ -6,7 +6,7 @@ from db_tool import Task, Water
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Date, cast
-from datetime import date
+from datetime import date, timedelta, datetime
 
 # START DB STUFF
 engine = create_engine('sqlite:///task.db')
@@ -22,7 +22,12 @@ else:
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255) 
 BLUE = (0, 255, 255)
-GREEN = (255, 0 ,255)
+RED  = (255,0,0)
+YELLOW = (244, 232, 66)
+
+PROG_BAR = pygame.USEREVENT+1
+
+daily_hour_goal = 8
 
 clock = pygame.time.Clock()
 os.environ['SDL_VIDEO_WINDOW_POS'] = '0,0'
@@ -70,11 +75,15 @@ def add_water():
     session.add(water_amnt)
     session.commit()
 
-    
-def show_water():
+def get_day_start():
+    ## I should really have this be a constant or something
+    ## Otherwise I'm hitting the DB every second or so via the daily_prog_bar() event trigger
+    day_start = session.query(Task).filter(Task.created_date>=date.today()).order_by(Task.id.desc()).first().created_date
+    return day_start
 
+def show_water():
     # water button
-    pygame.draw.rect(windowSurface, GREEN, [0, 35, 20, 20])
+    pygame.draw.rect(windowSurface, YELLOW, [0, 35, 200, 20])
     
     daily_amount = session.query(Water).filter(Water.created_date >= date.today())
     daily_amount = sum([x.amount for x in daily_amount])
@@ -84,31 +93,52 @@ def show_water():
 
     rect_size = infoObject.current_w * percent_of_daily_goal
     print(rect_size)
-    pygame.draw.rect(windowSurface, BLUE, [0, 0, rect_size, 5])
+    pygame.draw.rect(windowSurface, BLUE, [0, 0, rect_size, 3])
     pygame.display.update()
 
+def convert_to_time(dtime):
+    return time.mktime(dtime.timetuple()) + dtime.microsecond / 1E6
 
 
+def daily_prog_bar():
+    daily_start = convert_to_time(get_day_start())
+    daily_end = daily_start + 60*60*daily_hour_goal
+    cur_time = convert_to_time(datetime.utcnow())
+    
+    prog_bar = abs((cur_time - daily_start)/(daily_end - daily_start))
+
+    if prog_bar >= 100:
+            prog_bar = 100
+    elif prog_bar <= 0:
+            prog_bar = 0
+    return prog_bar
+
+def draw_progres_bar(prog_bar_amnt):
+    rect_size = infoObject.current_w * prog_bar_amnt
+    pygame.draw.rect(windowSurface, RED, [0, 3, rect_size, 4])
+    pygame.display.update()
 
 def task_loop():
     last_task = ''
-    time_elapsed_since_last_action = 0
+    pygame.time.set_timer(PROG_BAR, 1000)
     while True:
         for event in pygame.event.get():
+            if event.type == PROG_BAR:
+                print(daily_prog_bar())
+                draw_progres_bar(daily_prog_bar())
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # On right click mark task showing as done.
                 if event.button == 3:
                     mark_current_task_done()
                     get_recent_query()
                 if event.button == 1:
-                    if 55 >= pygame.mouse.get_pos()[1] >= 35 and 20 >= pygame.mouse.get_pos()[0] >=0:
+                    if 55 >= pygame.mouse.get_pos()[1] >= 35 and 200 >= pygame.mouse.get_pos()[0] >=0: #should clean up this line
                         print(pygame.mouse.get_pos())
                         add_water()
             # If mouse touches top of screen requery the db.
             if pygame.mouse.get_pos()[1] == 0:
                 get_recent_query()
                 
-            
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()     
