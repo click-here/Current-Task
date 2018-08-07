@@ -74,6 +74,7 @@ def add_water():
     water_amnt = Water(amount=24)
     session.add(water_amnt)
     session.commit()
+    show_water()
 
 def get_day_start():
     ## I should really have this be a constant or something
