@@ -78,7 +78,7 @@ def add_water():
 def get_day_start():
     ## I should really have this be a constant or something
     ## Otherwise I'm hitting the DB every second or so via the daily_prog_bar() event trigger
-    day_start = session.query(Task).filter(Task.created_date>=date.today()).order_by(Task.id.desc()).first().created_date
+    day_start = session.query(Task).filter(Task.created_date>=date.today()).order_by(Task.id.asc()).first().created_date
     return day_start
 
 def show_water():
