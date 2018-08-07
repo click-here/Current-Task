@@ -27,7 +27,7 @@ YELLOW = (244, 232, 66)
 
 PROG_BAR = pygame.USEREVENT+1
 
-daily_hour_goal = 8
+daily_hour_goal = 8.5
 
 clock = pygame.time.Clock()
 os.environ['SDL_VIDEO_WINDOW_POS'] = '0,0'
@@ -64,7 +64,9 @@ def get_recent_query():
     time.sleep(2)
 
 def mark_current_task_done():
+    
     current_task = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first()
+    
     print(current_task)
     current_task.is_active = 0
     session.commit()
@@ -81,7 +83,7 @@ def get_day_start():
     ## Otherwise I'm hitting the DB every second or so via the daily_prog_bar() event trigger
     day_start = session.query(Task).filter(Task.created_date>=date.today()).order_by(Task.id.asc()).first().created_date
     return day_start
-
+ 
 def show_water():
     # water button
     pygame.draw.rect(windowSurface, YELLOW, [0, 35, 200, 20])
