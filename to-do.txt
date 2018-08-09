@@ -9,3 +9,4 @@
 9. A simple way to track water consumption with a little blue bar that goes accross the screen. 
 10. New DB table for tracking what project the current task is associated with. Flow I'm envisioning would be. Enter Task. Fuzzy matching looks at previous tasks, attempts to guess a project. Weighted to what I've been working on in the past ~7 days.  Gives the user like 3-4 choices that are simple buttons. If none of the buttons are right then give the user a combobox.
 11. Possibly implement something like this https://github.com/boppreh/keyboard
+12. Tracker for pushups/handstands. Add a little gui report with matplotlib charts or something. lets bloat this up!

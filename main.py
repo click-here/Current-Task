@@ -1,18 +1,27 @@
 import pygame, sys
 from pygame.locals import *
-import os  
-import time
+import os, time
 from db_tool import Task, Water
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Date, cast
 from datetime import date, timedelta, datetime
+import subprocess
 
+PYGAME_HEIGHT = 55
+
+### Launch DesktopCoral
+## Doesn't work yet, script won't continue until DesktopCoral returns
+##os.system("C:\Scripts\DesktopCoral\DesktopCoral.exe -monitorid 1 -placement top -dockheight " + str(PYGAME_HEIGHT))
+
+
+print('su')
 # START DB STUFF
 engine = create_engine('sqlite:///task.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 query = session.query(Task).filter(Task.is_active==1).order_by(Task.id.desc()).first()
+
 if query is not None:
     last_task = query.task_name
 else:
@@ -34,7 +43,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = '0,0'
 
 pygame.init()
 infoObject = pygame.display.Info()
-windowSurface = pygame.display.set_mode((infoObject.current_w, 55), pygame.NOFRAME)  
+windowSurface = pygame.display.set_mode((infoObject.current_w, PYGAME_HEIGHT), pygame.NOFRAME)  
 
 windowSurface.fill(BLACK)
 
