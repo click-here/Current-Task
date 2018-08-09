@@ -1,7 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 import os, time
-from db_tool import Task, Water
+from db_tool import Task, Water, ProjectTask
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Date, cast
@@ -10,12 +10,11 @@ import subprocess
 
 PYGAME_HEIGHT = 55
 
-### Launch DesktopCoral
+## Launch DesktopCoral
 ## Doesn't work yet, script won't continue until DesktopCoral returns
-##os.system("C:\Scripts\DesktopCoral\DesktopCoral.exe -monitorid 1 -placement top -dockheight " + str(PYGAME_HEIGHT))
+## os.system("C:\Scripts\DesktopCoral\DesktopCoral.exe -monitorid 1 -placement top -dockheight " + str(PYGAME_HEIGHT))
 
 
-print('su')
 # START DB STUFF
 engine = create_engine('sqlite:///task.db')
 Session = sessionmaker(bind=engine)
