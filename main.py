@@ -15,7 +15,6 @@ PYGAME_HEIGHT = 55
 ##os.system("C:\Scripts\DesktopCoral\DesktopCoral.exe -monitorid 1 -placement top -dockheight " + str(PYGAME_HEIGHT))
 
 
-print('su')
 # START DB STUFF
 engine = create_engine('sqlite:///task.db')
 Session = sessionmaker(bind=engine)
@@ -43,6 +42,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = '0,0'
 
 pygame.init()
 infoObject = pygame.display.Info()
+print(pygame.display.Info())
 windowSurface = pygame.display.set_mode((infoObject.current_w, PYGAME_HEIGHT), pygame.NOFRAME)  
 
 windowSurface.fill(BLACK)
@@ -134,6 +134,7 @@ def task_loop():
     last_task = ''
     pygame.time.set_timer(PROG_BAR, 1000)
     while True:
+        clock.tick(1)
         for event in pygame.event.get():
             if event.type == PROG_BAR:
                 print(daily_prog_bar())

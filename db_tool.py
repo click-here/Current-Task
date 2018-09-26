@@ -20,8 +20,8 @@ class Water(Base):
     id = Column(Integer, primary_key=True)
     amount = Column(Integer,nullable=False)
     created_date = Column(DateTime, default=datetime.datetime.utcnow)
-    
- 
+
+
 engine = create_engine('sqlite:///task.db')
  
 # create table if needed
