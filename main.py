@@ -134,7 +134,7 @@ def task_loop():
     last_task = ''
     pygame.time.set_timer(PROG_BAR, 1000)
     while True:
-        clock.tick(1)
+        clock.tick(10)
         for event in pygame.event.get():
             if event.type == PROG_BAR:
                 print(daily_prog_bar())
